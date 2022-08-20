@@ -1,3 +1,5 @@
+const { Schema, model } = require('mongoose');
+
 const userSchema = new Schmema(
 {
     userName: {
@@ -17,18 +19,32 @@ const userSchema = new Schmema(
       "Please fill a valid email address",
     ],
     },
-    thoughts: {
-        postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'thought-model'
-    }
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Thought',
+      },
+    ],
+    friends: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  {
+    toJSON: {
+      virtuals: true,
     },
-    friends: {
-        postedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }
+    id: false,
+  }
+);
 
-    }
-})
+userSchema.virtual('friendCount').get(function() {
+  return this.friends.length;
+});
+
+const User = model('User', userSchema);
+
+module.exports = User;
 
