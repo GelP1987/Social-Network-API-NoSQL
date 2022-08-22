@@ -61,7 +61,8 @@ const userController = {
       if (!data) {
         return res.status(404).json({ message: "No User Found" });
       }
-      return Thought.deleteMany({ _id: { $in: data.thoughts } });
+      //   return Thought.deleteMany({ _id: { $in: data.thoughts } });
+      return res.json({ message: "This User Has Been Deleted!" });
     });
   },
   makeFriend: (req, res) => {
