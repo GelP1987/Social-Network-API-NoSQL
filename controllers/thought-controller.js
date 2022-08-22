@@ -17,7 +17,7 @@ const thoughtController = {
       .select("-__v")
       .then((data) => {
         if (!data) {
-          return res.status(404).json({ message: "Thought not found" });
+          return res.status(404).json({ message: "No thought found" });
         }
         return res.json(data);
       })
@@ -26,7 +26,7 @@ const thoughtController = {
         return res.sendStatus(500);
       });
   },
-  createThought: (req, res) => {
+  makeThought: (req, res) => {
     Thought.create(req.body)
       .then((data) => {
         User.findOneAndUpdate(
@@ -41,7 +41,7 @@ const thoughtController = {
         return res.sendStatus(500);
       });
   },
-  updateThought: (req, res) => {
+  changeThought: (req, res) => {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $set: req.body },
@@ -52,7 +52,7 @@ const thoughtController = {
     )
       .then((data) => {
         if (!data) {
-          return res.status(404).json({ message: "Thought not found" });
+          return res.status(404).json({ message: "No thought found" });
         }
         return res.json(data);
       })
@@ -61,15 +61,15 @@ const thoughtController = {
         return res.sendStatus(500);
       });
   },
-  deleteThought: (req, res) => {
+  removeThought: (req, res) => {
     Thought.findOneAndDelete({ _id: req.params.thoughtId }).then((data) => {
       if (!data) {
-        return res.status(404).json({ message: "Thought not found" });
+        return res.status(404).json({ message: "No thought found" });
       }
       return res.json({ message: "Deleted thought" });
     });
   },
-  createReaction: (req, res) => {
+  makeReaction: (req, res) => {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $push: { reactions: req.body } },
@@ -80,7 +80,7 @@ const thoughtController = {
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "Thought not found" });
+          res.status(404).json({ message: "No thought found" });
         }
         res.json(data);
       })
@@ -90,7 +90,7 @@ const thoughtController = {
       });
   },
   // TODO:  not working
-  deleteReaction: (req, res) => {
+  removeReaction: (req, res) => {
     Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
@@ -98,7 +98,7 @@ const thoughtController = {
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "Thought not found" });
+          res.status(404).json({ message: "No thought found" });
         }
         res.json(data);
       })

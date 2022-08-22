@@ -17,7 +17,7 @@ const userController = {
       .select("-__v")
       .then((data) => {
         if (!data) {
-          return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({ message: "No User Found" });
         }
         return res.json(data);
       })
@@ -26,7 +26,7 @@ const userController = {
         return res.sendStatus(500);
       });
   },
-  createUser: (req, res) => {
+  makeUser: (req, res) => {
     const { username, email } = req.body;
     if (!username || !email) {
       return res.status(400).json({
@@ -40,14 +40,14 @@ const userController = {
         return res.sendStatus(500);
       });
   },
-  updateUser: (req, res) => {
+  changeUser: (req, res) => {
     User.findOneAndUpdate({ _id: req.params.userId }, req.body, {
       new: true,
       runValidators: true,
     })
       .then((data) => {
         if (!data) {
-          return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({ message: "No User Found" });
         }
         return res.json(data);
       })
@@ -56,15 +56,15 @@ const userController = {
         return res.sendStatus(500);
       });
   },
-  deleteUser: (req, res) => {
+  removeUser: (req, res) => {
     User.findOneAndDelete({ _id: req.params.userId }).then((data) => {
       if (!data) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).json({ message: "No User Found" });
       }
       return Thought.deleteMany({ _id: { $in: data.thoughts } });
     });
   },
-  addFriend: (req, res) => {
+  makeFriend: (req, res) => {
     User.findOneAndUpdate(
       { _id: req.params.userId },
       { $push: { friends: req.params.friendId } },
@@ -75,7 +75,7 @@ const userController = {
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "User not found" });
+          res.status(404).json({ message: "No User Found" });
         }
         res.json(data);
       })
@@ -84,7 +84,7 @@ const userController = {
         return res.sendStatus(500);
       });
   },
-  deleteFriend: (req, res) => {
+  removeFriend: (req, res) => {
     User.findOneAndUpdate(
       { _id: req.params.userId },
       { $pull: { friends: req.params.friendId } },
@@ -92,7 +92,7 @@ const userController = {
     )
       .then((data) => {
         if (!data) {
-          res.status(404).json({ message: "User not found1" });
+          res.status(404).json({ message: "No User Found" });
         }
         res.json(data);
       })
